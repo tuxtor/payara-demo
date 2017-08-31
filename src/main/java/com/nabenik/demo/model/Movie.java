@@ -49,7 +49,7 @@ public class Movie implements Serializable {
 
 	public Movie() {
 	}
-
+	
 	public Integer getMovieId() {
 		return this.movieId;
 	}

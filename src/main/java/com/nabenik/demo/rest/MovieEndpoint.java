@@ -1,5 +1,6 @@
 package com.nabenik.demo.rest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.enterprise.context.RequestScoped;
@@ -17,7 +18,9 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import com.nabenik.demo.controller.MovieDao;
+import com.nabenik.demo.dto.MovieDTO;
 import com.nabenik.demo.model.Movie;
+import com.nabenik.demo.util.WordChopper;
 
 @RequestScoped
 @Path("/movies")
@@ -27,6 +30,9 @@ public class MovieEndpoint {
 
 	@Inject
 	MovieDao movieService;
+	
+	@Inject
+	WordChopper wordChopper;
 	
 	@POST
 	public Response create(final Movie movie) {
@@ -49,6 +55,26 @@ public class MovieEndpoint {
 			@QueryParam("max") final Integer maxResult) {
 		final List<Movie> movies = movieService.listAll(startPosition, maxResult);
 		return movies;
+	}
+	
+	@GET
+	@Path("/mobile")
+	public List<MovieDTO> listMobile(@QueryParam("start") final Integer startPosition,
+			@QueryParam("max") final Integer maxResult) {
+		final List<Movie> movies = movieService.listAll(startPosition, maxResult);
+		List<MovieDTO> response = new ArrayList<MovieDTO>();
+		
+		for (Movie movie : movies) {
+			MovieDTO newDTO = new MovieDTO();
+			newDTO.setDirector(movie.getDirectorName());
+			newDTO.setGenres(wordChopper.chopString(movie.getGenres()));
+			newDTO.setMovie(movie.getMovieTitle());
+			newDTO.setKeywords(wordChopper.chopString(movie.getPlotKeywords()));
+			
+			response.add(newDTO);
+		}
+		
+		return response;
 	}
 
 	@PUT
