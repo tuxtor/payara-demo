@@ -9,12 +9,13 @@ import javax.persistence.*;
  * 
  */
 @Entity
+@Table(name="movie")
 @NamedQuery(name="Movie.findAll", query="SELECT m FROM Movie m")
 public class Movie implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="movie_id")
 	private Integer movieId;
 
