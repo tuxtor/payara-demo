@@ -6,6 +6,6 @@ import javax.enterprise.context.ApplicationScoped;
 public class WordChopper {
 
 	public String[] chopString(String base){
-		return base.split("|");
+		return base.split("\\|");
 	}
 }
