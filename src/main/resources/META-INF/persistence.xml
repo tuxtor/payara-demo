@@ -3,6 +3,7 @@
   <persistence-unit name="payara-demo-persistence-unit" transaction-type="JTA">
     <description>Forge Persistence Unit</description>
     <jta-data-source>java:app/jdbc/MicroDS</jta-data-source>
+    <class>com.nabenik.demo.model.Movie</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
