@@ -1,7 +1,7 @@
 package com.nabenik.demo.rest;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -62,19 +62,15 @@ public class MovieEndpoint {
 	public List<MovieDTO> listMobile(@QueryParam("start") final Integer startPosition,
 			@QueryParam("max") final Integer maxResult) {
 		final List<Movie> movies = movieService.listAll(startPosition, maxResult);
-		List<MovieDTO> response = new ArrayList<MovieDTO>();
 		
-		for (Movie movie : movies) {
-			MovieDTO newDTO = new MovieDTO();
-			newDTO.setDirector(movie.getDirectorName());
-			newDTO.setGenres(wordChopper.chopString(movie.getGenres()));
-			newDTO.setMovie(movie.getMovieTitle());
-			newDTO.setKeywords(wordChopper.chopString(movie.getPlotKeywords()));
-			
-			response.add(newDTO);
-		}
+		return movies.stream()
+				.map(x -> new MovieDTO(x.getMovieTitle(), 
+							x.getDirectorName(), 
+							wordChopper.chopString(x.getPlotKeywords()), 
+							wordChopper.chopString(x.getGenres()))
+				)
+				.collect(Collectors.toList());
 		
-		return response;
 	}
 
 	@PUT

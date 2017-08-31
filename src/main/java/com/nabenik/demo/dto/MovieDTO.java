@@ -3,9 +3,16 @@ package com.nabenik.demo.dto;
 public class MovieDTO {
 	private String movie;
 	private String director;
-	
 	private String[] keywords;
 	private String[] genres;
+	
+	public MovieDTO(String movie, String director, String[] keywords, String[] genres) {
+		super();
+		this.movie = movie;
+		this.director = director;
+		this.keywords = keywords;
+		this.genres = genres;
+	}
 	public String getMovie() {
 		return movie;
 	}
