@@ -8,6 +8,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,11 +31,11 @@ public class OmdbDao {
 	 * @return OmdbDTO representation
 	 */
 	public OmdbDTO getMovieInfo(String imdbId) {
-		Client singleClient = ClientBuilder.newClient();
+		Client client = ClientBuilder.newClient();
 		
 		logger.log(Level.INFO, "Retrieving " + BASE_OMDB_URL.concat(imdbId));
 		
-		String details =  singleClient.target(BASE_OMDB_URL.concat(imdbId))
+		String details =  client.target(BASE_OMDB_URL.concat(imdbId))
 				.request(MediaType.APPLICATION_JSON)
 				.get(String.class);
 		logger.log(Level.INFO, details.toString());
