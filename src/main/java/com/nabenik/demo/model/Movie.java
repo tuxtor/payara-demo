@@ -2,31 +2,32 @@ package com.nabenik.demo.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
-
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * The persistent class for the movie database table.
  * 
  */
 @Entity
-@Table(name="movie")
-@NamedQuery(name="Movie.findAll", query="SELECT m FROM Movie m")
+@Table(name = "movie")
+@NamedQuery(name = "Movie.findAll", query = "SELECT m FROM Movie m")
+@XmlRootElement
 public class Movie implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="movie_id")
-	private Integer movieId;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "movie_id")
+	private Long movieId;
 
 	private Long budget;
 
-	@Column(name="content_rating")
+	@Column(name = "content_rating")
 	private String contentRating;
 
 	private String country;
 
-	@Column(name="director_name")
+	@Column(name = "director_name")
 	private String directorName;
 
 	private Integer duration;
@@ -35,26 +36,26 @@ public class Movie implements Serializable {
 
 	private Long gross;
 
-	@Column(name="movie_imdb_link")
+	@Column(name = "movie_imdb_link")
 	private String movieImdbLink;
 
-	@Column(name="movie_title")
+	@Column(name = "movie_title")
 	private String movieTitle;
 
-	@Column(name="plot_keywords")
+	@Column(name = "plot_keywords")
 	private String plotKeywords;
 
-	@Column(name="title_year")
+	@Column(name = "title_year")
 	private Integer titleYear;
 
 	public Movie() {
 	}
-	
-	public Integer getMovieId() {
+
+	public Long getMovieId() {
 		return this.movieId;
 	}
 
-	public void setMovieId(Integer movieId) {
+	public void setMovieId(Long movieId) {
 		this.movieId = movieId;
 	}
 

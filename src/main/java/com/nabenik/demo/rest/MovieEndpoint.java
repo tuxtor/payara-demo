@@ -1,6 +1,8 @@
 package com.nabenik.demo.rest;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import javax.enterprise.context.RequestScoped;
@@ -18,14 +20,16 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import com.nabenik.demo.controller.MovieDao;
+import com.nabenik.demo.controller.OmdbDao;
 import com.nabenik.demo.dto.MovieDTO;
+import com.nabenik.demo.dto.OmdbDTO;
 import com.nabenik.demo.model.Movie;
 import com.nabenik.demo.util.WordChopper;
 
 @RequestScoped
 @Path("/movies")
-@Produces({ "application/xml", "application/json" })
-@Consumes({ "application/xml", "application/json" })
+@Produces({ "application/json" })
+@Consumes({ "application/json" })
 public class MovieEndpoint {
 
 	@Inject
@@ -33,6 +37,12 @@ public class MovieEndpoint {
 	
 	@Inject
 	WordChopper wordChopper;
+	
+	@Inject
+	OmdbDao omdbService;
+	
+	@Inject
+	Logger logger;
 	
 	@POST
 	public Response create(final Movie movie) {
@@ -47,7 +57,34 @@ public class MovieEndpoint {
 		if (movie == null) {
 			return Response.status(Status.NOT_FOUND).build();
 		}
+		
+		
 		return Response.ok(movie).build();
+	}
+	
+	@GET
+	@Path("/expanded/{id:[0-9][0-9]*}")
+	public Response findExpandedById(@PathParam("id") final Long id) {
+		Movie movie = movieService.findById(id);
+		if (movie == null) {
+			return Response.status(Status.NOT_FOUND).build();
+		}
+		
+		//Fill with details from another service
+		String imdbId = movie.getMovieImdbLink()
+				.replaceAll("http://www.imdb.com/title/", "")
+				.replaceAll("/\\?ref_=fn_tt_tt_1", "");
+		logger.log(Level.INFO, "Retrieving movie from omdb title " + imdbId);
+		
+		OmdbDTO expandedDetails = omdbService.getMovieInfo(imdbId);
+		
+		//Merging results in new DTO
+		MovieDTO movieResult = new MovieDTO(movie.getMovieTitle(), 
+				movie.getDirectorName(), 
+				wordChopper.chopString(movie.getPlotKeywords()), 
+				wordChopper.chopString(movie.getGenres()),
+				expandedDetails);
+		return Response.ok(movieResult).build();
 	}
 
 	@GET

@@ -6,12 +6,19 @@ public class MovieDTO {
 	private String[] keywords;
 	private String[] genres;
 	
+	private OmdbDTO details;
+	
 	public MovieDTO(String movie, String director, String[] keywords, String[] genres) {
 		super();
 		this.movie = movie;
 		this.director = director;
 		this.keywords = keywords;
 		this.genres = genres;
+	}
+	
+	public MovieDTO(String movie, String director, String[] keywords, String[] genres, OmdbDTO details) {
+		this(movie, director, keywords, genres);
+		this.details = details;
 	}
 	public String getMovie() {
 		return movie;
@@ -37,6 +44,15 @@ public class MovieDTO {
 	public void setGenres(String[] genres) {
 		this.genres = genres;
 	}
+
+	public OmdbDTO getDetails() {
+		return details;
+	}
+
+	public void setDetails(OmdbDTO details) {
+		this.details = details;
+	}
+
 	
 	
 	

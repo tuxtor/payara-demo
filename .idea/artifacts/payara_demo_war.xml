@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="payara-demo:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="payara-demo.war">
+      <element id="artifact" artifact-name="payara-demo:war exploded" />
+    </root>
+  </artifact>
+</component>
