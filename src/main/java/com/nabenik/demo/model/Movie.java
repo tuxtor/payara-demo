@@ -17,7 +17,7 @@ public class Movie implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="movie_id")
-	private Integer movieId;
+	private Long movieId;
 
 	private Long budget;
 
@@ -50,11 +50,11 @@ public class Movie implements Serializable {
 	public Movie() {
 	}
 
-	public Integer getMovieId() {
+	public Long getMovieId() {
 		return this.movieId;
 	}
 
-	public void setMovieId(Integer movieId) {
+	public void setMovieId(Long movieId) {
 		this.movieId = movieId;
 	}
 

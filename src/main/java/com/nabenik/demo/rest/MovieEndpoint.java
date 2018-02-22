@@ -13,20 +13,33 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+
 import com.nabenik.demo.controller.MovieDao;
+import com.nabenik.demo.dto.MovieDTO;
+import com.nabenik.demo.dto.OmdbDTO;
 import com.nabenik.demo.model.Movie;
 
 @RequestScoped
 @Path("/movies")
-@Produces({ "application/xml", "application/json" })
-@Consumes({ "application/xml", "application/json" })
+@Produces({ "application/json" })
+@Consumes({ "application/json" })
 public class MovieEndpoint {
 
 	@Inject
 	MovieDao movieService;
+	
+	//Consul, etcd, . . .
+	@Inject
+	@ConfigProperty(name = "omdbservice.url")
+	String omdbDaemonServiceUrl;
+	
 	
 	@POST
 	public Response create(final Movie movie) {
@@ -42,6 +55,35 @@ public class MovieEndpoint {
 			return Response.status(Status.NOT_FOUND).build();
 		}
 		return Response.ok(movie).build();
+	}
+	
+	@GET
+	@Path("/expanded/{id:[0-9][0-9]*}")
+	public Response findExpandedById(@PathParam("id") final Long id) {
+		Movie movie = movieService.findById(id);
+		if (movie == null) {
+			return Response.status(Status.NOT_FOUND).build();
+		}
+		
+		//Fill with details from another service
+		String imdbId = movie.getMovieImdbLink()
+				.replaceAll("http://www.imdb.com/title/", "")
+				.replaceAll("/\\?ref_=fn_tt_tt_1", "");
+		
+		Client client = ClientBuilder.newClient();
+		
+		
+		
+		OmdbDTO expandedDetails = client.target(omdbDaemonServiceUrl)
+				.path(imdbId)
+				.request(MediaType.APPLICATION_JSON)
+				.get(OmdbDTO.class);
+		
+		//Merging results in new DTO
+		MovieDTO movieResult = new MovieDTO(movie.getMovieTitle(), 
+				movie.getDirectorName(),
+				expandedDetails);
+		return Response.ok(movieResult).build();
 	}
 
 	@GET
