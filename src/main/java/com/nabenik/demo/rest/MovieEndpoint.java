@@ -1,5 +1,6 @@
 package com.nabenik.demo.rest;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -76,7 +77,12 @@ public class MovieEndpoint {
 				.replaceAll("/\\?ref_=fn_tt_tt_1", "");
 		logger.log(Level.INFO, "Retrieving movie from omdb title " + imdbId);
 		
-		OmdbDTO expandedDetails = omdbService.getMovieInfo(imdbId);
+		OmdbDTO expandedDetails = new OmdbDTO();
+		try {
+			expandedDetails = omdbService.getMovieInfo(imdbId);
+		} catch (IOException e) {
+			logger.log(Level.SEVERE, e.toString());
+		}
 		
 		//Merging results in new DTO
 		MovieDTO movieResult = new MovieDTO(movie.getMovieTitle(), 

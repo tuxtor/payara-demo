@@ -29,7 +29,7 @@ public class OmdbDao {
 	 * @param imdbId
 	 * @return OmdbDTO representation
 	 */
-	public OmdbDTO getMovieInfo(String imdbId) {
+	public OmdbDTO getMovieInfo(String imdbId) throws IOException{
 		Client client = ClientBuilder.newClient();
 		
 		logger.log(Level.INFO, "Retrieving " + BASE_OMDB_URL.concat(imdbId));
@@ -39,14 +39,10 @@ public class OmdbDao {
 				.get(String.class);
 		logger.log(Level.INFO, details.toString());
 		
-		//Wrong way of marshalling 
+		//Dummy marshalling
 		ObjectMapper mapper = new ObjectMapper();
 		OmdbDTO omdbDTO = new OmdbDTO();
-		try {
-			omdbDTO = mapper.readValue(details, OmdbDTO.class);
-		} catch (IOException e) {
-			e.printStackTrace();
-		} 
+		omdbDTO = mapper.readValue(details, OmdbDTO.class);
 		return omdbDTO;
 		
 	}
