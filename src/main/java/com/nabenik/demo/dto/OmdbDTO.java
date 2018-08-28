@@ -14,18 +14,18 @@ public class OmdbDTO {
 	
 	@JsonProperty("Plot")
     String plot;
-	@JsonProperty("Ratings")
-    List<MovieRatingDTO> ratings;
+//	@JsonProperty("Ratings")
+//    List<MovieRatingDTO> ratings;
 	
     public OmdbDTO() {
 		super();
 	}
 
 
-	public OmdbDTO(String plot, List<MovieRatingDTO> ratings) {
+	public OmdbDTO(String plot) {
 		super();
 		this.plot = plot;
-		this.ratings = ratings;
+//		this.ratings = ratings;
 	}
 
     public String getPlot() {
@@ -36,18 +36,18 @@ public class OmdbDTO {
         this.plot = plot;
     }
 
-    public List<MovieRatingDTO> getRatings() {
-        return ratings;
-    }
-
-    public void setRatings(List<MovieRatingDTO> ratings) {
-        this.ratings = ratings;
-    }
+//    public List<MovieRatingDTO> getRatings() {
+//        return ratings;
+//    }
+//
+//    public void setRatings(List<MovieRatingDTO> ratings) {
+//        this.ratings = ratings;
+//    }
 
 
 	@Override
 	public String toString() {
-		return "OmdbDTO [plot=" + plot + ", ratings=" + ratings + "]";
+		return "OmdbDTO [plot=" + plot +  "]";
 	}
 
 }

@@ -36,7 +36,7 @@ public class MovieEndpoint {
 	
 	//Consul, etcd, . . .
 	@Inject
-	@ConfigProperty(name = "omdbservice.url")
+	@ConfigProperty(name = "omdbservice", defaultValue = "http://localhost:8080/omdb-demo/rest/omdb/")
 	String omdbDaemonServiceUrl;
 
 	@GET
