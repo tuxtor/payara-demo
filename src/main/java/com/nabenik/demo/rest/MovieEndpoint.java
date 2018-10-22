@@ -18,6 +18,8 @@ import javax.ws.rs.core.Response.Status;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.faulttolerance.Fallback;
+import org.eclipse.microprofile.metrics.MetricUnits;
+import org.eclipse.microprofile.metrics.annotation.Gauge;
 import org.eclipse.microprofile.metrics.annotation.Metered;
 
 import com.nabenik.demo.controller.MovieDao;
@@ -49,7 +51,7 @@ public class MovieEndpoint {
 		return Response.ok(movie).build();
 	}
 	
-	@Metered
+	@Metered(name = "moviesRetrieved", unit = MetricUnits.MINUTES, description = "Metrics to monitor movies", absolute = true)
 	@GET
 	@Path("/expanded/{id:[0-9][0-9]*}")
 	@Fallback(fallbackMethod = "findById")
@@ -85,6 +87,12 @@ public class MovieEndpoint {
 			@QueryParam("max") final Integer maxResult) {
 		final List<Movie> movies = movieService.listAll(startPosition, maxResult);
 		return movies;
+	}
+	
+
+	@Gauge(unit = "ExternalDatabases", name = "movieDatabases", absolute = true)
+	public long getDatabases() {
+	   return 1;
 	}
 
 }
