@@ -27,10 +27,10 @@ import org.eclipse.microprofile.metrics.annotation.Gauge;
 import org.eclipse.microprofile.metrics.annotation.Metered;
 import org.eclipse.microprofile.metrics.annotation.Timed;
 
-import com.nabenik.demo.controller.MovieDao;
 import com.nabenik.demo.dto.MovieDTO;
 import com.nabenik.demo.dto.OmdbDTO;
 import com.nabenik.demo.model.Movie;
+import com.nabenik.demo.repository.MovieDao;
 
 @RequestScoped
 @Path("/movies")
@@ -102,20 +102,20 @@ public class MovieEndpoint {
 	}
 	
 
-	@Gauge(unit = "ExternalDatabases", name = "movieDatabases", absolute = true)
-	public long getDatabases() {
-		int number = (int)(Math.random() * 100);
-		System.out.println(number);
-		int criteria = number % 2;
-		System.out.println(criteria);
-		
-		
-		if(criteria == 0) {
-			return 100;
-		}else {
-			return 50;
-		}
-	   
-	}
+//	@Gauge(unit = "ExternalDatabases", name = "movieDatabases", absolute = true)
+//	public long getDatabases() {
+//		int number = (int)(Math.random() * 100);
+//		System.out.println(number);
+//		int criteria = number % 2;
+//		System.out.println(criteria);
+//		
+//		
+//		if(criteria == 0) {
+//			return 100;
+//		}else {
+//			return 50;
+//		}
+//	   
+//	}
 
 }

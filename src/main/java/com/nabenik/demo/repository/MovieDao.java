@@ -1,4 +1,4 @@
-package com.nabenik.demo.controller;
+package com.nabenik.demo.repository;
 
 import java.util.List;
 
